@@ -31,6 +31,7 @@ jobs:
         ls
         IMAGE_TAG=${{ steps.generate_version.outputs.new_tag }}
         docker build -t $DOCKERHUB_USER/$REPO_NAME:$IMAGE_TAG  .
+        echo ::set-env name=IMAGE_TAG::$IMAGE_TAG
     
     - name: Login to Registry
       run: |
