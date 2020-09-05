@@ -40,7 +40,7 @@ jobs:
     - name: Push to Registry
       run: |
         ls
-        docker push $REPO_NAME:$IMAGE_TAG
+        docker push $DOCKERHUB_USER/$REPO_NAME:$IMAGE_TAG
 
     - name: Generate Version
       id: generate_tag
