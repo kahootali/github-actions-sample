@@ -1,0 +1,51 @@
+name: Docker Image Build Push
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  docker-build-push:
+    runs-on: ubuntu-latest
+    env:
+      DOCKERHUB_USER: '${{ secrets.DOCKERHUB_USER }}'
+      DOCKERHUB_PASSWORD: '${{ secrets.DOCKERHUB_PASSWORD }}'
+      REPO_NAME: ${{ github.repository }}
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Generate Version Only
+      id: generate_version
+      uses: anothrNick/github-tag-action@1.23.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+        DRY_RUN: true
+        DEFAULT_BUMP: "patch"
+
+    - name: Build Docker Image
+      run: |
+        ls
+        IMAGE_TAG=${{ steps.generate_version.outputs.new_tag }}
+        docker build -t $DOCKERHUB_USER/$REPO_NAME:$IMAGE_TAG  .
+    
+    - name: Login to Registry
+      run: |
+        ls
+        docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
+    
+    - name: Push to Registry
+      run: |
+        ls
+        docker push $REPO_NAME:$IMAGE_TAG
+
+    - name: Generate Version
+      id: generate_tag
+      uses: anothrNick/github-tag-action@1.26.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+        DEFAULT_BUMP: "patch"
