@@ -1,2 +1,4 @@
-# github-actions-sample
-Repository to show some sample github actions
+Repository to show some samples for Github Actions
+
+
+
