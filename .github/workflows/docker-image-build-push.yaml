@@ -39,6 +39,7 @@ jobs:
         docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
         docker images
         docker push $DOCKERHUB_USER/$REPO_NAME:$IMAGE_TAG
+        docker logout 
 
     - name: Generate Version
       id: generate_tag
