@@ -33,14 +33,11 @@ jobs:
         docker build -t $DOCKERHUB_USER/$REPO_NAME:$IMAGE_TAG  .
         echo ::set-env name=IMAGE_TAG::$IMAGE_TAG
     
-    - name: Login to Registry
+    - name: Login to Registry & Push Image
       run: |
         ls
         docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
-    
-    - name: Push to Registry
-      run: |
-        ls
+        docker images
         docker push $DOCKERHUB_USER/$REPO_NAME:$IMAGE_TAG
 
     - name: Generate Version
