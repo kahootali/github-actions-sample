@@ -1,0 +1,81 @@
+name: Build & Push Docker Image
+
+on:
+  push:
+    branches:
+    - main
+    - master
+  pull_request:
+    branches:
+    - main
+    - master
+
+jobs:
+
+  push_to_docker:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    name: Build and Push Image to Image registry
+    env:
+      REGISTRY: docker.io
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+      - name: Generate Vars
+        id: generate_vars
+        run: |
+          # Just Tag
+          IMAGE_TAG=sha-$(echo $(git rev-parse --short HEAD) | cut -c1-7)
+          # Just Image name
+          IMAGE_NAME=${{ github.repository }}
+          #Image ID= Name + Tag
+          IMAGE_ID=$IMAGE_NAME:$IMAGE_TAG
+          IMAGE_REPO=$REGISTRY/$IMAGE_ID
+          IMAGE=$(echo $IMAGE_REPO | tr '[:upper:]' '[:lower:]')
+          echo "Image: $IMAGE"
+          echo "::set-output name=image::$IMAGE"
+          echo "::set-output name=image_name::$IMAGE_NAME"
+          echo "::set-output name=image_tag::$IMAGE_TAG"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.generate_vars.outputs.image }}
+      - uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        
+      - name: Comment on PR
+        if: success()
+        uses: mshick/add-pr-comment@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          message: '@${{ github.actor }} Image is available for testing. `docker pull ${{ steps.generate_vars.outputs.image }}`'
+          allow-repeats: false
+
+      - name: Notify Failure
+        if: failure()
+        uses: mshick/add-pr-comment@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          message: '@${{ github.actor }} The pipeline failed! [Build](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks) has Failed!'
+          allow-repeats: false
