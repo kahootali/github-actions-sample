@@ -29,7 +29,7 @@ jobs:
       - name: Generate Vars
         id: generate_vars
         run: |
-          [[ ${github.event_name} != "push" ]] && push="true" || push="false"
+          [[ ${{ github.event_name }} != "push" ]] && push="true" || push="false"
           echo ${push}
           # Just Tag
           IMAGE_TAG=sha-$(echo $(git rev-parse --short HEAD) | cut -c1-7)
