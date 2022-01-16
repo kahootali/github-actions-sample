@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-    - "path/*"
+    - "path/**"
 
 jobs:
   list-repo:
