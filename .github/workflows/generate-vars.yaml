@@ -21,7 +21,7 @@ jobs:
         # Just Tag
         IMAGE_TAG=sha-$(echo $(git rev-parse --short HEAD) | cut -c1-7)
         # Just Image name
-        IMAGE_NAME="kahootali-gh-sample"
+        IMAGE_NAME=${{ github.repository }}-"gh-sample"
         #Image ID= Name + Tag
         IMAGE_ID=$IMAGE_NAME:$IMAGE_TAG
         IMAGE_REPO=$REGISTRY/$IMAGE_ID
