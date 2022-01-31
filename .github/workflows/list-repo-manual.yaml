@@ -1,4 +1,4 @@
-name: List Repo
+name: List Repo Manually
 
 on:
   workflow_dispatch:

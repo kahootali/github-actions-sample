@@ -1,3 +1,4 @@
+---
 name: List Repo
 
 on:
@@ -18,3 +19,26 @@ jobs:
 
     - name: List Repo
       run: ls
+---
+name: List Repo 2nd Workflow in Same file
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  list-repo:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: List Repo
+      run: |
+        cd path
+
+    - name: List Repo
+      run: |
+        echo "In Path"
+        ls
