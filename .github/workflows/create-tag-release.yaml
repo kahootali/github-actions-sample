@@ -1,0 +1,37 @@
+name: Create Tag & Release
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  Build-and-Deploy:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    name: Build and Push Image to Image registry
+    env:
+      REGISTRY: docker.io
+      IMAGE_VERSION: "v0.0.1"
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Bump version and push tag
+      id: tag_version
+      uses: mathieudutour/github-tag-action@v6.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        custom_tag: ${{ env.IMAGE_VERSION }} 
+        tag_prefix: "test-gh-release-"
+    - name: Create a GitHub release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: ${{ steps.tag_version.outputs.new_tag }}
+        name: ${{ steps.tag_version.outputs.new_tag }}
+        body: ${{ steps.tag_version.outputs.changelog }}
