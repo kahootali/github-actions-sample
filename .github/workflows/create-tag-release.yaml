@@ -3,7 +3,7 @@ name: Create Tag & Release
 on:
   push:
     branches:
-      - develop
+      - master
 
 jobs:
   Build-and-Deploy:
