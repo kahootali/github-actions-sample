@@ -16,6 +16,7 @@ jobs:
     - name: List Repo
       run: |
         cd path
+        ls
 
     - name: List Repo
       run: ls
