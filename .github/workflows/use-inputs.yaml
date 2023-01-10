@@ -1,0 +1,20 @@
+name: Mixed inputs
+
+on:
+  workflow_dispatch:
+    inputs:
+      apps:
+        type: choice
+        description: Apps to Deploy
+        options: 
+        - app1
+        - app2
+        - app3
+        - app4
+jobs:
+  apps:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Send greeting
+      run: echo "Apps to be deployed are  ${{ github.event.inputs.apps }}"
