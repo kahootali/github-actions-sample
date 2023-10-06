@@ -23,32 +23,46 @@ jobs:
         fields: repo,author,action,eventName,ref,workflowRun
         custom_payload: |
           {
-            text: "Text Release Created for ${{ github.event.repository.name }}",
             attachments: [{
-              "author_name": "8398a7@action-slack", // json
-              fallback: 'fallback',
+              "author_name": "${{ github.event.repository.name }}",
               color: 'good',
-              title: 'CI Result',
-              text: 'Succeeded',
+              title: 'Release Created for ${{ github.event.repository.name }}',
+              changes: 'Succeeded',
               fields: [{
-                title: 'lower case',
-                value: 'LOWER CASE CHECK'.toLowerCase(),
+                title: 'Status',
+                value: '${{ job.status }}',
                 short: true
               },
               {
-                title: 'reverse',
-                value: 'gnirts esrever'.split('').reverse().join(''),
+                title: 'author',
+                value: '${process.env.AS_AUTHOR}',
                 short: true
               },
               {
-                title: 'long title1',
-                value: 'long value1',
+                title: 'pipeline',
+                value: '${process.env.AS_WORKFLOW_RUN}',
+                short: true
+              },
+              {
+                title: 'Release URL',
+                value: 'https://github.com/kahootali/golang-sample-app/releases/tag/v1.2.20',
+                short: false
+              },
+              {
+                title: 'Release Changes',
+                value: 'Release for the 7th batch of DevOps class',
                 short: false
               }],
               actions: [{
               }]
             }]
           }
-          
+          {
+            attachments: [{
+              color: 'good',
+              title: 'Release Created for ${{ github.event.repository.name }}',
+              text: 'release is done',
+            }]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
