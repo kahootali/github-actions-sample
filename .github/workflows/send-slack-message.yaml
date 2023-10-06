@@ -21,6 +21,7 @@ jobs:
       with:
         status: custom
         fields: repo,author,action,eventName,ref,workflowRun
+        mention: 'here'
         custom_payload: |
           {
             attachments: [{
@@ -35,12 +36,12 @@ jobs:
               },
               {
                 title: 'author',
-                value: '${process.env.AS_AUTHOR}',
+                value: '${AS_AUTHOR}',
                 short: true
               },
               {
                 title: 'pipeline',
-                value: '${process.env.AS_WORKFLOW_RUN}',
+                value: '${AS_WORKFLOW_RUN}',
                 short: true
               },
               {
