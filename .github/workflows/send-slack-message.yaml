@@ -35,16 +35,6 @@ jobs:
                 short: true
               },
               {
-                title: 'author',
-                value: '${AS_AUTHOR}',
-                short: true
-              },
-              {
-                title: 'pipeline',
-                value: '${AS_WORKFLOW_RUN}',
-                short: true
-              },
-              {
                 title: 'Release URL',
                 value: 'https://github.com/kahootali/golang-sample-app/releases/tag/v1.2.20',
                 short: false
