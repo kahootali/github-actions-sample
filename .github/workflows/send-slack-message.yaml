@@ -1,0 +1,35 @@
+---
+name: List Repo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  list-repo:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Notify Slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,author,action,eventName,ref,workflow,workflowRun
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+    - name: Notify Slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,author,action,eventName,ref,workflow,workflowRun
+        custom_payload: |
+          {
+            attachments: [{
+              color: 'good',
+              title: 'Release Created for ${{ github.event.repository.name }}',
+              text: 'release is done',
+            }]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
