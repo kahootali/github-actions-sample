@@ -1,11 +1,11 @@
 ---
-name: List Repo
+name: Send Slack Message
 
 on:
   workflow_dispatch:
 
 jobs:
-  list-repo:
+  send-slack-message:
     runs-on: ubuntu-latest
     steps:
     - name: Check out repository
