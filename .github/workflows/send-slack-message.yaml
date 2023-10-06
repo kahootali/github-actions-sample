@@ -57,12 +57,5 @@ jobs:
               }]
             }]
           }
-          {
-            attachments: [{
-              color: 'good',
-              title: 'Release Created for ${{ github.event.repository.name }}',
-              text: 'release is done',
-            }]
-          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
