@@ -23,11 +23,32 @@ jobs:
         fields: repo,author,action,eventName,ref,workflowRun
         custom_payload: |
           {
+            text: "Text Release Created for ${{ github.event.repository.name }}",
             attachments: [{
+              "author_name": "8398a7@action-slack", // json
+              fallback: 'fallback',
               color: 'good',
-              title: 'Release Created for ${{ github.event.repository.name }}',
-              text: 'release is done',
+              title: 'CI Result',
+              text: 'Succeeded',
+              fields: [{
+                title: 'lower case',
+                value: 'LOWER CASE CHECK'.toLowerCase(),
+                short: true
+              },
+              {
+                title: 'reverse',
+                value: 'gnirts esrever'.split('').reverse().join(''),
+                short: true
+              },
+              {
+                title: 'long title1',
+                value: 'long value1',
+                short: false
+              }],
+              actions: [{
+              }]
             }]
           }
+          
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
