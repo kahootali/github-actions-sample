@@ -16,6 +16,8 @@ jobs:
 
       - name: Notify Slack of a Tag
         uses: 8398a7/action-slack@v3
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
         with:
           status: custom
           custom_payload: |
