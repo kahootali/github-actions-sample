@@ -14,6 +14,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Echo
-        run: |
-          echo ${{ steps.changelog.outputs.changelog }}
+      - name: Notify Slack of a Tag
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              attachments: [{
+                "author_name": "${{ github.event.repository.name }}",
+                color: 'good',
+                title: 'Release Created for ${{ github.event.repository.name }}',
+                changes: 'Succeeded',
+                fields: [{
+                  title: 'Status',
+                  value: '${{ job.status }}',
+                  short: true
+                },
+                {
+                  title: 'Release Changes',
+                  value: '${{ steps.changelog.outputs.changelog }}',
+                  short: false
+                }],
+                actions: [{
+                }]
+              }]
+            }
