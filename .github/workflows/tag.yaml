@@ -14,33 +14,33 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Notify Slack of a Tag
-        uses: 8398a7/action-slack@v3
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-        with:
-          status: custom
-          custom_payload: |
-            {
-              attachments: [{
-                "author_name": "${{ github.event.repository.name }}",
-                color: 'good',
-                title: 'Release Created for ${{ github.event.repository.name }}',
-                changes: 'Succeeded',
-                fields: [{
-                  title: 'Status',
-                  value: '${{ job.status }}',
-                  short: true
-                },
-                {
-                  title: 'Release Changes',
-                  value: '${{ steps.changelog.outputs.changelog }}',
-                  short: false
-                }],
-                actions: [{
-                }]
-              }]
-            }
+      # - name: Notify Slack of a Tag
+      #   uses: 8398a7/action-slack@v3
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+      #   with:
+      #     status: custom
+      #     custom_payload: |
+      #       {
+      #         attachments: [{
+      #           "author_name": "${{ github.event.repository.name }}",
+      #           color: 'good',
+      #           title: 'Release Created for ${{ github.event.repository.name }}',
+      #           changes: 'Succeeded',
+      #           fields: [{
+      #             title: 'Status',
+      #             value: '${{ job.status }}',
+      #             short: true
+      #           },
+      #           {
+      #             title: 'Release Changes',
+      #             value: '${{ steps.changelog.outputs.changelog }}',
+      #             short: false
+      #           }],
+      #           actions: [{
+      #           }]
+      #         }]
+      #       }
 
       - name: Create a GitHub release
         id: 'github_release'
